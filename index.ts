@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import User from "./models/User";
 import { faker } from "@faker-js/faker";
+import "./db";
 
 const app: Express = express();
 const port = 9000;
@@ -16,6 +17,7 @@ app.get("/addUser", (req: Request, res: Response) => {
   newUser.save().catch((error: Error) => {
     console.error("Error saving user", error);
   });
+  res.json("유저만들기 성공!");
 });
 
 const getAllUsers = async () => {
@@ -27,14 +29,14 @@ const getAllUsers = async () => {
   }
 };
 
-app.get("/showUser", (req: Request, res: Response) => {
-  getAllUsers()
-    .then((users) => {
-      console.log("All users:", users);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+app.get("/showUser", async (req: Request, res: Response) => {
+  try {
+    const users = await getAllUsers();
+    res.json(users);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error fetching users");
+  }
 });
 
 app.listen(port, () => {

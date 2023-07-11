@@ -17,6 +17,7 @@ services:
       - 27017:27017
     networks:
       - mynetwork
+    mem_limit: 1g
 
 networks:
   mynetwork:
