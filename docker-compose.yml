@@ -8,7 +8,7 @@ services:
     depends_on:
       - mongo
     networks:
-      - mynetwork
+      - testnetwork
 
   mongo:
     image: mongo
@@ -16,9 +16,9 @@ services:
     ports:
       - 27017:27017
     networks:
-      - mynetwork
+      - testnetwork
     mem_limit: 1g
 
 networks:
-  mynetwork:
+  testnetwork:
     driver: bridge

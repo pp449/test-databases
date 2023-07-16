@@ -10,10 +10,11 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Typescript + Nodejs + Express Server");
 });
 
-app.get("/addUser", (req: Request, res: Response) => {
-  const randomName = faker.internet.userName();
-  const randomAge = faker.number.int();
-  const newUser = new User({ name: randomName, age: randomAge });
+let number = 0;
+
+app.get("/addData", (req: Request, res: Response) => {
+  const username = `user${number}`;
+  const newUser = new User({ name: username, age: number++ });
   newUser.save().catch((error: Error) => {
     console.error("Error saving user", error);
   });
@@ -29,13 +30,23 @@ const getAllUsers = async () => {
   }
 };
 
-app.get("/showUser", async (req: Request, res: Response) => {
+app.get("/showData", async (req: Request, res: Response) => {
   try {
     const users = await getAllUsers();
     res.json(users);
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Error fetching users");
+  }
+});
+
+app.get("/showDataNum", async (req: Request, res: Response) => {
+  try {
+    const userCount = await User.countDocuments({});
+    res.json(userCount);
+  } catch (error) {
+    console.error("Error retrieving user count:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
